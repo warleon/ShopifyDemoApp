@@ -1,0 +1,23 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+name = "test"
+client_id = "a68dbc9979112d8fe20763f9df5672b2"
+application_url = "https://7644-38-25-16-78.ngrok-free.app"
+embedded = true
+
+[access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+scopes = "read_customers"
+use_legacy_install_flow = true
+
+[auth]
+redirect_urls = [ "https://7644-38-25-16-78.ngrok-free.app/api/get/install" ]
+
+[webhooks]
+api_version = "2024-01"
+
+[pos]
+embedded = false
+
+[build]
+dev_store_url = "baltotask.myshopify.com"
