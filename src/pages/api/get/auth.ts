@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import stringify from "json-stable-stringify";
 import { Hmac, createHmac } from "crypto";
 import { Url } from "url";
+import shopify from "@shopify/shopify-api";
 
 type ShopifyInstall = {
   hmac: string;
@@ -33,6 +34,15 @@ function validateHmac(data: ShopifyInstall): boolean {
   const computeHmac = macEngine.digest("base64");
   console.log([hmac, computeHmac]);
   return computeHmac === hmac;
+}
+function authenticate(req: NextApiRequest, res: NextApiResponse) {
+  //await shopify.auth.begin({
+  //shop: shopify.utils.sanitizeShop(req.query.shop, true),
+  //callbackPath: "/auth/callback",
+  //isOnline: false,
+  //rawRequest: req,
+  //rawResponse: res,
+  //});
 }
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {

@@ -11,7 +11,7 @@ scopes = "read_customers"
 use_legacy_install_flow = true
 
 [auth]
-redirect_urls = [ "https://7644-38-25-16-78.ngrok-free.app/api/get/install" ]
+redirect_urls = [ "https://7644-38-25-16-78.ngrok-free.app/api/get/auth" ]
 
 [webhooks]
 api_version = "2024-01"

@@ -1,1 +1,3 @@
-export var shopifyStoreKeys = new Map<string, string>();
+import { Shopify } from "@shopify/shopify-api";
+
+export var shopify: Shopify[] = [];
