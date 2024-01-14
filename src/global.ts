@@ -18,10 +18,11 @@ export function getShopify() {
     //code copied from the docs: https://github.com/Shopify/shopify-api-js/blob/main/packages/shopify-api/docs/guides/custom-store-app.md
     //and then modified
     shopify = shopifyApi({
+      adminApiAccessToken: process.env.SHOPIFY_ACCESS_TOKEN!, // Note: this is the API access token, NOT the API Secret Key
+      apiKey: process.env.SHOPIFY_API_KEY!,
       apiSecretKey: process.env.SHOPIFY_API_SECRET!, // Note: this is the API Secret Key, NOT the API access token
       apiVersion: ApiVersion.January24,
       isCustomStoreApp: true, // this MUST be set to true (default is false)
-      adminApiAccessToken: process.env.SHOPIFY_ACCESS_TOKEN!, // Note: this is the API access token, NOT the API Secret Key
       isEmbeddedApp: false,
       hostName: process.env.SHOPIFY_STORE_URL!,
       // Mount REST resources.
@@ -59,10 +60,14 @@ export function createWebhooks() {
     CUSTOMERS_UPDATE: [
       {
         deliveryMethod: DeliveryMethod.Http,
-        callbackUrl: "/api/webhook/custome_update",
+        callbackUrl: `${process.env.SHOPIFY_APP_URL}/api/webhook/customer_update`,
       },
     ],
   });
+  let topics = getShopify().webhooks.getTopicsAdded();
+  console.log(topics);
   getShopify().webhooks.register({ session: getSession() });
+  topics = getShopify().webhooks.getTopicsAdded();
+  console.log(topics);
   console.log("--------------- Initialized Shopify Webhooks ---------------");
 }
