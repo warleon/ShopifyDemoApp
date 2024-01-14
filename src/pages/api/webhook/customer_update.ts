@@ -8,15 +8,16 @@ import {
 } from "@shopify/shopify-api";
 import { getShopify } from "@/global";
 import stringify from "json-stable-stringify";
+import { PrismaClient } from "@prisma/client";
 
 function validateHmac(data: any, hmac: string): boolean {
-  console.log(data);
   const macEngine = createHmac("sha256", process.env.SHOPIFY_CLIENT_SECRET!);
   macEngine.update(JSON.stringify(data));
   const computeHmac = macEngine.digest("base64");
-  console.log([hmac, computeHmac]);
   return computeHmac === hmac;
 }
+
+const prisma = new PrismaClient();
 
 export default async function handler(
   req: NextApiRequest,
@@ -78,15 +79,18 @@ export default async function handler(
     fields.hmac = req.headers["x-shopify-hmac-sha256"] as string;
     fields.topic = req.headers["x-shopify-topic"] as string;
   }
-  console.log(fields);
-  console.log(req.body);
-  //TODO register client id and email in a database to send email when needed
-
   res.status(200).send("");
+  //TODO register client id and email in a database to send email when needed
   console.log(
     "-------------------------- BEGIN REQUEST HANDLE --------------------------"
   );
-
+  const Customer = req.body as { id: bigint; email: string };
+  const alreadyAdded = await prisma.customer.findUnique({
+    where: { id: Customer.id },
+  });
+  if (alreadyAdded === null) {
+    await prisma.customer.create({ data: Customer });
+  }
   console.log(
     "-------------------------- END REQUEST HANDLE --------------------------"
   );

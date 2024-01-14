@@ -1,0 +1,20 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Customer{
+  id  BigInt @id  //id given by the shopify api
+  email String @unique //email given by the shopify api
+}
+
+model User{
+  apiKey String @id 
+}
