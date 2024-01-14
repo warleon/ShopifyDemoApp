@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import stringify from "json-stable-stringify";
 import { Hmac, createHmac } from "crypto";
 import { Url } from "url";
-import shopify from "@shopify/shopify-api";
+import { getShopify } from "@/global";
 
 type ShopifyInstall = {
   hmac: string;
@@ -47,25 +47,27 @@ function authenticate(req: NextApiRequest, res: NextApiResponse) {
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "GET") {
-    res.status(405).send("Method not allowed");
+    res.status(405).appendHeader("Allow", "GET").send("Method Not Allowed");
     return;
   }
-  console.log(
-    "----------------------------- ENTER INSTALL HANDLER -----------------------------"
-  );
-  const data = validateInput(req.query);
-  if (data === null) {
-    res.status(422).send("Unprocessable Entity");
-    return;
-  }
-
-  if (!validateHmac(data)) {
-    res.status(403).send("Forbidden");
-    return;
-  }
-  console.log(
-    "----------------------------- START OAUTH PROCCESS -----------------------------"
-  );
+  //  console.log(
+  //    "----------------------------- ENTER INSTALL HANDLER -----------------------------"
+  //  );
+  //  const data = validateInput(req.query);
+  //  if (data === null) {
+  //    res.status(422).send("Unprocessable Entity");
+  //    return;
+  //  }
+  //
+  //  if (!validateHmac(data)) {
+  //    res.status(403).send("Forbidden");
+  //    return;
+  //  }
+  //  console.log(
+  //    "----------------------------- START OAUTH PROCCESS -----------------------------"
+  //  );
+  //
+  getShopify();
 
   res.status(200).send("Ok");
 }
