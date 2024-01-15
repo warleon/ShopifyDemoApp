@@ -18,7 +18,3 @@ model Customer{
   totalLikes BigInt @default(0)
   totalFollowers BigInt @default(0)
 }
-
-model User{
-  apiKey String @id 
-}
