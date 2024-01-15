@@ -8,6 +8,8 @@ import {
   LogSeverity,
 } from "@shopify/shopify-api";
 import { restResources } from "@shopify/shopify-api/rest/admin/2024-01";
+import { PrismaClient } from "@prisma/client";
+import exp from "constants";
 
 // cache object, one per api endpoint (as shown in response time)
 var shopify: Shopify | null = null;
@@ -71,3 +73,9 @@ export function createWebhooks() {
   console.log(topics);
   console.log("--------------- Initialized Shopify Webhooks ---------------");
 }
+
+declare global {
+  var prisma: undefined | PrismaClient;
+}
+export const prisma = globalThis.prisma ?? new PrismaClient();
+if (process.env.NODE_ENV !== "production") globalThis.prisma = prisma;

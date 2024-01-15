@@ -35,6 +35,7 @@ export default async function handler(
 ) {
   if (req.method !== "GET") {
     res.status(405).setHeader("Allow", "GET").send("Method Not Allowed");
+    return;
   }
   const topLikes = await prisma.customer.findMany({
     orderBy: {

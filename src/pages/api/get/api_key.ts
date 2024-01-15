@@ -10,6 +10,7 @@ export default async function handler(
 ) {
   if (req.method !== "GET") {
     res.status(405).setHeader("Allow", "GET").send("Method Not Allowed");
+    return;
   }
 
   const apiKey = { apiKey: randomBytes(256).toString("base64") };

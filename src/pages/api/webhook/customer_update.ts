@@ -25,6 +25,7 @@ export default async function handler(
 ) {
   if (req.method !== "POST") {
     res.status(405).setHeader("Allow", "POST").send("Method Not Allowed");
+    return;
   }
 
   const { valid, ...others } = await getShopify().webhooks.validate({
@@ -50,36 +51,23 @@ export default async function handler(
       res.status(400).send({ valid, ...others });
       return;
     }
-    //    } else if (reason.reason === WebhookValidationErrorReason.MissingHeaders) {
-    //      res
-    //        .status(400)
-    //        .send(
-    //          `${reason.reason} : ${JSON.stringify(
-    //            (reason as WebhookValidationMissingHeaders).missingHeaders
-    //          )}`
-    //        );
-    //      return;
-    //    } else {
-    //      res.status(400).send(reason.reason);
-    //      return;
-    //    }
   }
-  //  let fields: WebhookFields = {
-  //    webhookId: "",
-  //    apiVersion: "",
-  //    domain: "",
-  //    hmac: "",
-  //    topic: "",
-  //  };
-  //  if (valid) fields = others as WebhookFields;
-  //  else {
-  //    // handled diferent because of ignored Hmac validation
-  //    fields.webhookId = req.headers["x-shopify-webhook-id"] as string;
-  //    fields.apiVersion = req.headers["x-shopify-api-version"] as string;
-  //    fields.domain = req.headers["x-shopify-shop-domain"] as string;
-  //    fields.hmac = req.headers["x-shopify-hmac-sha256"] as string;
-  //    fields.topic = req.headers["x-shopify-topic"] as string;
-  //  }
+  let fields: WebhookFields = {
+    webhookId: "",
+    apiVersion: "",
+    domain: "",
+    hmac: "",
+    topic: "",
+  };
+  if (valid) fields = others as WebhookFields;
+  else {
+    // handled diferent because of ignored Hmac validation
+    fields.webhookId = req.headers["x-shopify-webhook-id"] as string;
+    fields.apiVersion = req.headers["x-shopify-api-version"] as string;
+    fields.domain = req.headers["x-shopify-shop-domain"] as string;
+    fields.hmac = req.headers["x-shopify-hmac-sha256"] as string;
+    fields.topic = req.headers["x-shopify-topic"] as string;
+  }
   res.status(200).send("Ok");
 
   const { id, email, created_at, first_name, last_name } = req.body;
