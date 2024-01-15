@@ -1,6 +1,5 @@
 export async function register() {
   if (process.env.NEXT_RUNTIME === "nodejs") {
-    const { createWebhooks } = await import("@/global");
-    createWebhooks();
+    await import("@/global"); // initialize global objects [prisma,shopify]
   }
 }

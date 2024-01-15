@@ -37,31 +37,34 @@ export default async function handler(
     res.status(405).setHeader("Allow", "GET").send("Method Not Allowed");
     return;
   }
-  const topLikes = await prisma.customer.findMany({
-    orderBy: {
-      totalLikes: "desc",
-    },
-    take: 10,
-  });
-  const topFollowers = await prisma.customer.findMany({
-    orderBy: {
-      totalFollowes: "desc",
-    },
-    take: 10,
-  });
-  const receivers = getUniques(topFollowers.concat(topLikes));
-
-  receivers.forEach((receiver) => {
-    transport.sendMail({
-      to: receiver.email,
-      subject: "Congrats from Balto.fr",
-      html: `Congrats ${
-        receiver.name
-      }! Ever since you became a Balto customer on ${receiver.signedUp.toDateString()}, you've gained ${
-        receiver.totalLikes
-      } likes and ${receiver.totalFollowes} follows.`,
+  try {
+    const topLikes = await prisma.customer.findMany({
+      orderBy: {
+        totalLikes: "desc",
+      },
+      take: 10,
     });
-  });
+    const topFollowers = await prisma.customer.findMany({
+      orderBy: {
+        totalFollowers: "desc",
+      },
+      take: 10,
+    });
+    const receivers = getUniques(topFollowers.concat(topLikes));
 
+    receivers.forEach((receiver) => {
+      transport.sendMail({
+        to: receiver.email,
+        subject: "Congrats from Balto.fr",
+        html: `Congrats ${
+          receiver.name
+        }! Ever since you became a Balto customer on ${receiver.signedUp.toDateString()}, you've gained ${
+          receiver.totalLikes
+        } likes and ${receiver.totalFollowes} follows.`,
+      });
+    });
+  } catch (err) {
+    res.status(500).send("Internal Server Error");
+  }
   res.status(200).send("Ok");
 }

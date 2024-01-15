@@ -16,7 +16,7 @@ model Customer{
   name String @default("")
   signedUp DateTime @default(now())
   totalLikes BigInt @default(0)
-  totalFollowes BigInt @default(0)
+  totalFollowers BigInt @default(0)
 }
 
 model User{

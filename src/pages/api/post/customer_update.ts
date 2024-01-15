@@ -1,24 +1,6 @@
-import { Customer, Prisma, PrismaClient } from "@prisma/client";
+import { Customer } from "@prisma/client";
+import { prisma } from "@/global";
 import type { NextApiRequest, NextApiResponse } from "next";
-
-interface Media {
-  customer_shopify_id: bigint;
-  likes_gained_today: bigint;
-  followers_gained_today: bigint;
-}
-
-const prisma = new PrismaClient();
-
-function validate(data: Media) {
-  if (
-    data.customer_shopify_id === undefined ||
-    data.followers_gained_today === undefined ||
-    data.likes_gained_today === undefined
-  )
-    throw "";
-
-  return data;
-}
 
 export default async function handler(
   req: NextApiRequest,
@@ -34,7 +16,7 @@ export default async function handler(
         id: req.body.customer_shopify_id,
       },
       data: {
-        totalFollowes: {
+        totalFollowers: {
           increment: req.body.followers_gained_today,
         },
         totalLikes: {
@@ -43,6 +25,7 @@ export default async function handler(
       },
     });
   } catch (err) {
+    // prisma validates the data an fails if incorrect
     res.status(400).send("Bad Request");
     return;
   }
