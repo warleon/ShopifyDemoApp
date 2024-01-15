@@ -9,7 +9,15 @@ import {
 import { restResources } from "@shopify/shopify-api/rest/admin/2024-01";
 import { PrismaClient } from "@prisma/client";
 
-function createShopify() {
+declare global {
+  var prisma: undefined | PrismaClient;
+  var shopify: undefined | Shopify;
+}
+
+export const prisma = globalThis.prisma ?? new PrismaClient();
+globalThis.prisma = prisma;
+
+async function createShopify() {
   const api = shopifyApi({
     adminApiAccessToken: process.env.SHOPIFY_ACCESS_TOKEN!,
     apiKey: process.env.SHOPIFY_API_KEY!,
@@ -40,19 +48,37 @@ function createShopify() {
       },
     ],
   });
+  const session = api.session.customAppSession(process.env.SHOPIFY_STORE_URL!);
   api.webhooks.register({
-    session: api.session.customAppSession(process.env.SHOPIFY_STORE_URL!),
+    session: session,
   });
+  let pageInfo;
+  do {
+    const response: any = await api.rest.Customer.all({
+      ...pageInfo?.nextPage?.query,
+      session: session,
+      limit: 10,
+    });
+
+    for (const customer of response.data) {
+      const data = {
+        id: customer.id,
+        email: customer.email,
+        signedUp: customer.created_at,
+        name: `${customer.first_name} ${customer.last_name}`,
+      };
+      try {
+        await prisma.customer.create({ data: data });
+      } catch {
+        // fails if costumer already exists
+        // occurs when app is redeployed
+      }
+    }
+
+    pageInfo = response.pageInfo;
+  } while (pageInfo?.nextPage);
   return api;
 }
 
-declare global {
-  var prisma: undefined | PrismaClient;
-  var shopify: undefined | Shopify;
-}
-
-export const prisma = globalThis.prisma ?? new PrismaClient();
-globalThis.prisma = prisma;
-
-export const shopify = globalThis.shopify ?? createShopify();
+export const shopify = globalThis.shopify ?? (await createShopify());
 globalThis.shopify = shopify;
