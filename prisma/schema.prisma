@@ -12,7 +12,11 @@ datasource db {
 
 model Customer{
   id  BigInt @id  //id given by the shopify api
-  email String @unique //email given by the shopify api
+  email String  @unique //email given by the shopify api
+  name String @default("")
+  signedUp DateTime @default(now())
+  totalLikes BigInt @default(0)
+  totalFollowes BigInt @default(0)
 }
 
 model User{

@@ -24,9 +24,9 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method !== "POST") {
-    console.log("incorrect method " + req.method);
     res.status(405).setHeader("Allow", "POST").send("Method Not Allowed");
   }
+
   const { valid, ...others } = await getShopify().webhooks.validate({
     rawBody: stringify(req.body), // is a string
     rawRequest: req,
@@ -36,6 +36,7 @@ export default async function handler(
   if (!valid) {
     console.log({ valid, ...others });
     const reason = others as WebhookValidationInvalid;
+
     if (
       reason.reason === WebhookValidationErrorReason.InvalidHmac &&
       getShopify().config.isCustomStoreApp
@@ -63,35 +64,37 @@ export default async function handler(
     //      return;
     //    }
   }
-  let fields: WebhookFields = {
-    webhookId: "",
-    apiVersion: "",
-    domain: "",
-    hmac: "",
-    topic: "",
-  };
-  if (valid) fields = others as WebhookFields;
-  else {
-    // handled diferent because of ignored Hmac validation
-    fields.webhookId = req.headers["x-shopify-webhook-id"] as string;
-    fields.apiVersion = req.headers["x-shopify-api-version"] as string;
-    fields.domain = req.headers["x-shopify-shop-domain"] as string;
-    fields.hmac = req.headers["x-shopify-hmac-sha256"] as string;
-    fields.topic = req.headers["x-shopify-topic"] as string;
-  }
-  res.status(200).send("");
-  //TODO register client id and email in a database to send email when needed
-  console.log(
-    "-------------------------- BEGIN REQUEST HANDLE --------------------------"
-  );
-  const Customer = req.body as { id: bigint; email: string };
-  const alreadyAdded = await prisma.customer.findUnique({
-    where: { id: Customer.id },
+  //  let fields: WebhookFields = {
+  //    webhookId: "",
+  //    apiVersion: "",
+  //    domain: "",
+  //    hmac: "",
+  //    topic: "",
+  //  };
+  //  if (valid) fields = others as WebhookFields;
+  //  else {
+  //    // handled diferent because of ignored Hmac validation
+  //    fields.webhookId = req.headers["x-shopify-webhook-id"] as string;
+  //    fields.apiVersion = req.headers["x-shopify-api-version"] as string;
+  //    fields.domain = req.headers["x-shopify-shop-domain"] as string;
+  //    fields.hmac = req.headers["x-shopify-hmac-sha256"] as string;
+  //    fields.topic = req.headers["x-shopify-topic"] as string;
+  //  }
+  res.status(200).send("Ok");
+
+  const { id, email, created_at, first_name, last_name } = req.body;
+  let customer = await prisma.customer.findUnique({
+    where: { id: id },
   });
-  if (alreadyAdded === null) {
-    await prisma.customer.create({ data: Customer });
+
+  if (customer === null) {
+    customer = await prisma.customer.create({
+      data: {
+        id,
+        email,
+        signedUp: created_at,
+        name: `${first_name} ${last_name}`,
+      },
+    });
   }
-  console.log(
-    "-------------------------- END REQUEST HANDLE --------------------------"
-  );
 }
