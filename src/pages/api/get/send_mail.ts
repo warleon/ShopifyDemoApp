@@ -2,6 +2,8 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { PrismaClient } from "@prisma/client";
 import { createTransport } from "nodemailer";
 
+const prisma = new PrismaClient();
+
 const transport = createTransport({
   service: "Gmail",
   auth: {
@@ -10,7 +12,23 @@ const transport = createTransport({
   },
 });
 
-const prisma = new PrismaClient();
+function getUniques(data: any[]) {
+  let res: typeof data = [];
+  let found = false;
+  for (const customer of data) {
+    found = false;
+    for (const unique of res) {
+      if (customer.id === unique.id) {
+        found = true;
+        break;
+      }
+    }
+    if (found) continue;
+    res.push(customer);
+  }
+  return res;
+}
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -30,12 +48,7 @@ export default async function handler(
     },
     take: 10,
   });
-  console.log(topFollowers);
-  console.log(topLikes);
-
-  const receivers = topFollowers
-    .concat(topLikes)
-    .filter((v, i, a) => a.indexOf(v) === i);
+  const receivers = getUniques(topFollowers.concat(topLikes));
 
   receivers.forEach((receiver) => {
     transport.sendMail({
