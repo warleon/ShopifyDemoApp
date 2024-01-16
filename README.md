@@ -138,11 +138,6 @@ Then:
     ```
     npm run dev
     ```
-    You can also run it on Production mode with
-    ```
-    npm run build
-    npm run start
-    ```
 1.  Go to the **Thunder Client** VSCode extension and import the `thunder-collection_baltoTask.json` file that is at the root of **this directory**
 
 If every step is correct, now:
