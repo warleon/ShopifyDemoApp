@@ -6,11 +6,11 @@
 
 #### Programing Language: TypeScript
 
-#### Execution Enviroment: NodeJs v20.11.0 (Latest at the time)
+#### Execution Enviroment: Node.js v20.11.0 (Latest at the time)
 
-#### Web Server: NextJs
+#### Web Server: Next.js
 
-I have chosen NextJs because it is the framework requested in the job posting.
+I have chosen Next.js because it is the framework requested in the job posting.
 
 #### Database: SQLite + Prisma ORM
 
@@ -52,6 +52,51 @@ left the incomming request pass even if the Hmac validation fails
 
 **TODO make This API Oauth compatible**
 
-## Execution
+## Testing
+
+### Requirements
+
+- Node.js v20.11.0
+- ngrok v3.5.0
+- VS Code + Thunder Client Extension (For endpoints testing)
+
+the versions are not mandatory, it may run with previous ones
+
+### To run
+
+I will asume that you have:
+
+- A **Shopify Development Store** alredy created.
+- A **Shopify Private App** for that store already created with access to its **API Credentials**
+
+Then:
+
+1.  Clone this repository if reading this on Github, else skip this step
+1.  Open the current directory (the one that contains this readme.md) on VSCode
+1.  Create a `.env.local` file with the following enviroment variables:
+
+    ```
+    SHOPIFY_API_KEY=
+    SHOPIFY_API_SECRET=
+    SHOPIFY_CLIENT_SECRET=${SHOPIFY_API_SECRET}
+    SHOPIFY_ACCESS_TOKEN=
+    SHOPIFY_APP_URL=
+    ```
+
+    And populate `SHOPIFY_API_KEY`, `SHOPIFY_API_SECRET`, `SHOPIFY_ACCESS_TOKEN` with its corresponding values from the private app **API Credentials**
+
+1.  Open 3 terminals, one for **Next.js**, other for **ngrok**, and other for **Prisma Studio**
+
+1.  On other terminal execute ngrok to create a test tunnel
+    ```
+    ngrok http 3000
+    ```
+1.  Copy the link of the **Forwarding** attribute shown in the **Ngrok terminal**
+    and paste it as the value of the `SHOPIFY_APP_URL` in the `.env.local` file
+1.  Install the project dependencies (npm in my case, you may have another package manager)
+    ```
+    npm install
+    ```
+1.
 
 # Version en Español del Informe
