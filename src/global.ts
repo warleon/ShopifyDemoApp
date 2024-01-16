@@ -17,7 +17,7 @@ declare global {
 export const prisma = globalThis.prisma ?? new PrismaClient();
 globalThis.prisma = prisma;
 
-async function createShopify() {
+function createShopify() {
   const api = shopifyApi({
     adminApiAccessToken: process.env.SHOPIFY_ACCESS_TOKEN!,
     apiKey: process.env.SHOPIFY_API_KEY!,
@@ -52,6 +52,15 @@ async function createShopify() {
   api.webhooks.register({
     session: session,
   });
+  return api;
+}
+
+export const shopify = globalThis.shopify ?? createShopify();
+globalThis.shopify = shopify;
+
+export async function fetchCustomers(api: Shopify) {
+  console.log("Fetching users");
+  const session = api.session.customAppSession(process.env.SHOPIFY_STORE_URL!);
   let pageInfo;
   do {
     const response: any = await api.rest.Customer.all({
@@ -77,8 +86,4 @@ async function createShopify() {
 
     pageInfo = response.pageInfo;
   } while (pageInfo?.nextPage);
-  return api;
 }
-
-export const shopify = globalThis.shopify ?? (await createShopify());
-globalThis.shopify = shopify;

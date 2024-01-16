@@ -25,7 +25,6 @@ export default async function handler(
     res.status(405).setHeader("Allow", "POST").send("Method Not Allowed");
     return;
   }
-
   // will fail for private app
   const { valid, ...others } = await shopify.webhooks.validate({
     rawBody: stringify(req.body), // also tried with JSON.stringify
@@ -34,6 +33,7 @@ export default async function handler(
   });
 
   if (!valid) {
+    console.log(others);
     const reason = others as WebhookValidationInvalid;
     if (
       reason.reason === WebhookValidationErrorReason.InvalidHmac &&
@@ -45,7 +45,7 @@ export default async function handler(
       return;
     }
   }
-
+  res.status(200).send("Ok"); //a legitimate shopify webhook trigger should always hit this line
   let fields: WebhookFields = {
     webhookId: "",
     apiVersion: "",
@@ -53,7 +53,6 @@ export default async function handler(
     hmac: "",
     topic: "",
   };
-  res.status(200).send("Ok"); //a legitimate shopify webhook trigger should always hit this line
   if (valid) fields = others as WebhookFields;
   else {
     // handled diferent because of ignored Hmac validation
@@ -63,6 +62,7 @@ export default async function handler(
     fields.hmac = req.headers["x-shopify-hmac-sha256"] as string;
     fields.topic = req.headers["x-shopify-topic"] as string;
   }
+
   const { id, email, created_at, first_name, last_name } = req.body;
   try {
     await prisma.customer.upsert({

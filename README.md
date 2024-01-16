@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# English Version Report
 
-## Getting Started
+## Design Decisions
 
-First, run the development server:
+### Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+#### Programing Language: TypeScript
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+#### Execution Enviroment: NodeJs v20.11.0 (Latest at the time)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+#### Web Server: NextJs
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+I have chosen NextJs because it is the framework requested in the job posting.
 
-## Learn More
+#### Database: SQLite + Prisma ORM
 
-To learn more about Next.js, take a look at the following resources:
+For the database I decided to use Prisma as the ORM and SQLite as the backend database, just for simplicity
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### API Design
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+For the API I have exposed just three http endpoints, wich are:
 
-## Deploy on Vercel
+- **POST /api/webhook/update_customer**
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+  > To receive the incoming notifications from **Shopify**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- **POST /api/post/update_customer**
+
+  > To receive the incoming notifications from social media
+  > (custom test cases)
+
+- **GET /api/get/send_mail**
+  > To send the mail to the
+  > **top ten most liked clients** and
+  > **top ten most followed clients**
+  > (only one email is sent per client if the sets share elements)
+
+#### Struggles
+
+Since **This API** is meant to be used with a **private app** created in the
+**Shopify Admin Configuration Panel**
+I have encountered an "unsolvable problem" during the development.
+that the neither **Shopify Admin API validation utility** nor a
+**Custom made validation procedure** made following the documentation for Webhooks validation
+are able verify the incoming message due to the inexisting **Client Secret**
+available for a **public app** created in the **Shopify Partners Dashboard**
+
+#### Solutions
+
+For the first version of **This API** I, in an optimistic mindset,
+left the incomming request pass even if the Hmac validation fails
+
+**TODO make This API Oauth compatible**
+
+## Execution
+
+# Version en Español del Informe
