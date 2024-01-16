@@ -1,3 +1,26 @@
+# Table of Content
+
+<!-- TOC start (generated with https://github.com/derlin/bitdowntoc) -->
+
+- [Task](#task)
+- [Design Decisions](#design-decisions)
+  - [Stack](#stack)
+    - [Programing Language: TypeScript](#programing-language-typescript)
+    - [Execution Enviroment: Node.js v20.11.0 (Latest at the time)](#execution-enviroment-nodejs-v20110-latest-at-the-time)
+    - [Web Server: Next.js](#web-server-nextjs)
+    - [Database: SQLite + Prisma ORM](#database-sqlite--prisma-orm)
+  - [API Design](#api-design)
+- [Testing](#testing)
+  - [Requirements](#requirements)
+  - [To run](#to-run)
+  - [Expected Behavior](#expected-behavior)
+  - [Interesting Files](#interesting-files)
+- [Struggles](#struggles)
+  - [Solutions](#solutions)
+- [Learning experience](#learning-experience)
+
+<!-- TOC end -->
+
 # Task
 
 Create a **Server Only Custom Shopify App** that:
@@ -213,6 +236,7 @@ available for a **public app** created in the **Shopify Partners Dashboard**
   left the incomming request pass even if the Hmac validation fails
 
 - **TODO make This API Oauth compatible**
+- As an external solution, the firewall can be configured such that only allows incoming traffic from specific domains, such like **shopify.com**, this solution is inspired by [**This Stack Exchange Question**](https://unix.stackexchange.com/questions/91701/ufw-allow-traffic-only-from-a-domain-with-dynamic-ip-address)
 
 # Learning experience
 
