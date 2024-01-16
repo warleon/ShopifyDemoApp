@@ -35,22 +35,10 @@ For the API I have exposed just three http endpoints, wich are:
   > **top ten most followed clients**
   > (only one email is sent per client if the sets share elements)
 
-#### Struggles
+On start up the server will query shopify for all of the shop customers so that customers created before deployment are taken into consideration for the email sending
 
-Since **This API** is meant to be used with a **private app** created in the
-**Shopify Admin Configuration Panel**
-I have encountered an "unsolvable problem" during the development.
-that the neither **Shopify Admin API validation utility** nor a
-**Custom made validation procedure** made following the documentation for Webhooks validation
-are able verify the incoming message due to the inexisting **Client Secret**
-available for a **public app** created in the **Shopify Partners Dashboard**
-
-#### Solutions
-
-For the first version of **This API** I, in an optimistic mindset,
-left the incomming request pass even if the Hmac validation fails
-
-**TODO make This API Oauth compatible**
+The **Customer's Marketing option**: "Customer agreed to receive marketing emails"
+is ignored by **This Demo** just to make testing less cumbersome
 
 ## Testing
 
@@ -128,5 +116,22 @@ Then:
     request, feel free to modify the default ones in the
     `thunder-collection_baltoTask.json`
 1.  You can also play with **This API** in the **Shopify Admin Pannnel** by **modifying or creating some customers** in that case make sure to leave your email, so that you can test the send mail endpoint
+
+### Struggles
+
+Since **This API** is meant to be used with a **private app** created in the
+**Shopify Admin Configuration Panel**
+I have encountered an "unsolvable problem" during the development.
+that the neither **Shopify Admin API validation utility** nor a
+**Custom made validation procedure** made following the documentation for Webhooks validation
+are able verify the incoming message due to the inexisting **Client Secret**
+available for a **public app** created in the **Shopify Partners Dashboard**
+
+#### Solutions
+
+- For the first version of **This API** I, in an optimistic mindset,
+  left the incomming request pass even if the Hmac validation fails
+
+  **TODO make This API Oauth compatible**
 
 # Version en Español del Informe
