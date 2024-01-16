@@ -137,6 +137,45 @@ Else:
 
 > the program might fail in execution at some point, as it should
 
+## Expected Behavior
+
+When executing the request loaded to **Thunder Client**
+
+- Webhook
+  - webhook get
+    > 405 method not allowed, set response header allow:POST
+  - webhook missing header
+    > 400 bad reques, in debug mode shopify prints the headers needed
+  - webhook invalid 200 but fail 0
+    > 200 ok, no changes to the database done, it is 200 because of the ignored Hmac validation (same reason from now on)
+  - webhook invalid 200 but success 0
+    > 200 ok, creates a Customer record on the database with the given fields
+  - webhook invalid 200 but success 1
+    > 200 ok, if called after the previous resquest and left with the same email nothing should happen, because of the unique constraint applied to the email field
+- update_custome
+  - social_media get
+    >
+  - social_media empty 0
+    >
+  - social_media empty 1
+    >
+  - social_media empty 2
+    >
+  - social_media empty 3
+    >
+  - social_media valid 0
+    >
+  - social_media valid 1
+    >
+  - social_media invalid 0
+    >
+  - social_media invalid 1
+    >
+  - social_media invalid 2
+    >
+  - social_media invalid 3
+    >
+
 ## Interesting Files
 
 Just for **Code Review** simplification theese are the code files written by me:
