@@ -139,7 +139,7 @@ Else:
 
 ## Expected Behavior
 
-When executing the request loaded to **Thunder Client**
+When executing the requests loaded to **Thunder Client**
 
 - Webhook
   - webhook get
@@ -154,27 +154,32 @@ When executing the request loaded to **Thunder Client**
     > 200 ok, if called after the previous resquest and left with the same email nothing should happen, because of the unique constraint applied to the email field
 - update_custome
   - social_media get
-    >
+    > 405 method not allowed, set response header allow:POST
   - social_media empty 0
-    >
+    > 400 bad request, no side effects in the database
   - social_media empty 1
-    >
+    > 400 bad request, no side effects in the database
   - social_media empty 2
-    >
+    > 400 bad request, no side effects in the database
   - social_media empty 3
-    >
+    > 400 bad request, no side effects in the database
   - social_media valid 0
-    >
+    > 200 ok, record with the given id is updated in the database
   - social_media valid 1
-    >
+    > 200 ok, record with the given id is updated in the database
   - social_media invalid 0
-    >
+    > 400 invalid json, no side effects in the database
   - social_media invalid 1
-    >
+    > 400 bad request, do side effects in the database
   - social_media invalid 2
-    >
+    > 400 bad request, do side effects in the database
   - social_media invalid 3
-    >
+    > 400 bad request, do side effects in the database
+- send_mail
+  - send_mail
+    > 200 Ok, email is send from the gmail account specified in the enviroment variables to the corresponding emails accounts in the top ten most liked customers and top ten most followed customers (only once per account if sets are overlapping)
+  - send_mail post
+    > 405 method not allowed, set response header allow:GET
 
 ## Interesting Files
 
