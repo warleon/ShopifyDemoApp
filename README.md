@@ -195,7 +195,7 @@ When executing the requests loaded to **Thunder Client**
     > 400 bad request, do side effects in the database
 - send_mail
   - send_mail
-    > 200 Ok, email is send from the gmail account specified in the enviroment variables to the corresponding emails accounts in the top ten most liked customers and top ten most followed customers (only once per account if sets are overlapping)
+    > 200 Ok, email is send from the gmail account specified in the enviroment variables to the corresponding email accounts in the top ten most liked customers and top ten most followed customers (only once per account if sets are overlapping)
   - send_mail post
     > 405 method not allowed, set response header allow:GET
 
