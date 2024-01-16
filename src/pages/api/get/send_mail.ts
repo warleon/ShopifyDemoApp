@@ -1,14 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { prisma } from "@/global";
-import { createTransport } from "nodemailer";
-
-const transport = createTransport({
-  service: "Gmail",
-  auth: {
-    user: process.env.EMAIL_ACCOUNT!,
-    pass: process.env.EMAIL_PASSWORD,
-  },
-});
+import { prisma, transport } from "@/global";
 
 function getUniques(data: any[]) {
   let res: typeof data = [];
@@ -58,7 +49,7 @@ export default async function handler(
           receiver.name
         }! Ever since you became a Balto customer on ${receiver.signedUp.toDateString()}, you've gained ${
           receiver.totalLikes
-        } likes and ${receiver.totalFollowes} follows.`,
+        } likes and ${receiver.totalFollowers} follows.`,
       });
     });
   } catch (err) {

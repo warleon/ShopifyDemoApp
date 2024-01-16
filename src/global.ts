@@ -8,14 +8,27 @@ import {
 } from "@shopify/shopify-api";
 import { restResources } from "@shopify/shopify-api/rest/admin/2024-01";
 import { PrismaClient } from "@prisma/client";
+import { Transporter, createTransport } from "nodemailer";
 
 declare global {
   var prisma: undefined | PrismaClient;
   var shopify: undefined | Shopify;
+  var transport: undefined | Transporter;
 }
 
 export const prisma = globalThis.prisma ?? new PrismaClient();
 globalThis.prisma = prisma;
+
+export const transport =
+  globalThis.transport ??
+  createTransport({
+    service: "Gmail",
+    auth: {
+      user: process.env.EMAIL_ACCOUNT!,
+      pass: process.env.EMAIL_PASSWORD,
+    },
+  });
+globalThis.transport = transport;
 
 function createShopify() {
   const api = shopifyApi({
