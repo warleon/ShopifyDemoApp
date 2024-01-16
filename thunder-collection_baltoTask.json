@@ -1,7 +1,7 @@
 {
     "client": "Thunder Client",
     "collectionName": "baltoTask",
-    "dateExported": "2024-01-16T15:15:19.035Z",
+    "dateExported": "2024-01-16T17:52:00.657Z",
     "version": "1.1",
     "folders": [
         {
@@ -17,6 +17,13 @@
             "containerId": "",
             "created": "2024-01-15T22:59:41.395Z",
             "sortNum": 20000
+        },
+        {
+            "_id": "a639f458-e491-4abd-a0e3-beb5f2de7d70",
+            "name": "send_mail",
+            "containerId": "",
+            "created": "2024-01-16T17:40:50.174Z",
+            "sortNum": 40000
         }
     ],
     "requests": [
@@ -30,6 +37,20 @@
             "sortNum": 10000,
             "created": "2024-01-15T22:57:25.776Z",
             "modified": "2024-01-15T23:26:42.575Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "a0c8a27a-3193-467e-acdc-1d69bbcb9019",
+            "colId": "21e1f991-b9d7-4e34-8279-77186a99027b",
+            "containerId": "a639f458-e491-4abd-a0e3-beb5f2de7d70",
+            "name": "send_mail",
+            "url": "http://localhost:3000/api/get/send_mail",
+            "method": "GET",
+            "sortNum": 10000,
+            "created": "2024-01-15T22:59:21.561Z",
+            "modified": "2024-01-16T17:41:07.418Z",
             "headers": [],
             "params": [],
             "tests": []
@@ -84,16 +105,32 @@
             "tests": []
         },
         {
-            "_id": "a0c8a27a-3193-467e-acdc-1d69bbcb9019",
+            "_id": "6fb7d190-a381-415a-abf2-7ffebfab7713",
             "colId": "21e1f991-b9d7-4e34-8279-77186a99027b",
-            "containerId": "",
-            "name": "send_mail",
-            "url": "",
+            "containerId": "a639f458-e491-4abd-a0e3-beb5f2de7d70",
+            "name": "send_mail post",
+            "url": "http://localhost:3000/api/get/send_mail",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2024-01-16T17:41:11.868Z",
+            "modified": "2024-01-16T17:41:23.865Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "4bd1eb4d-c46e-42af-ad2e-0e55c5387f82",
+            "colId": "21e1f991-b9d7-4e34-8279-77186a99027b",
+            "containerId": "98ccaeb5-950f-420a-a209-b254bfd34da9",
+            "name": "social_media get",
+            "url": "http://localhost:3000/api/post/customer_update",
             "method": "GET",
-            "sortNum": 30000,
-            "created": "2024-01-15T22:59:21.561Z",
-            "modified": "2024-01-15T22:59:21.561Z",
-            "headers": []
+            "sortNum": 25000,
+            "created": "2024-01-16T17:25:51.825Z",
+            "modified": "2024-01-16T17:26:09.620Z",
+            "headers": [],
+            "params": [],
+            "tests": []
         },
         {
             "_id": "7c9a2e0b-6c3c-4f57-a204-67b0fdf43dd0",
@@ -179,49 +216,186 @@
             "_id": "4bd7fd2c-4e74-4b2a-8030-949c96f8d0df",
             "colId": "21e1f991-b9d7-4e34-8279-77186a99027b",
             "containerId": "98ccaeb5-950f-420a-a209-b254bfd34da9",
-            "name": "social_media",
-            "url": "",
-            "method": "GET",
+            "name": "social_media empty 0",
+            "url": "http://localhost:3000/api/post/customer_update",
+            "method": "POST",
             "sortNum": 50000,
             "created": "2024-01-15T23:01:38.835Z",
-            "modified": "2024-01-15T23:01:38.835Z",
-            "headers": []
+            "modified": "2024-01-16T17:23:51.483Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "7eba0c0f-bafb-43ad-975e-73f94a6ca9dd",
+            "colId": "21e1f991-b9d7-4e34-8279-77186a99027b",
+            "containerId": "98ccaeb5-950f-420a-a209-b254bfd34da9",
+            "name": "social_media empty 1",
+            "url": "http://localhost:3000/api/post/customer_update",
+            "method": "POST",
+            "sortNum": 52500,
+            "created": "2024-01-16T17:37:48.986Z",
+            "modified": "2024-01-16T17:38:21.456Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"customer_shopify_id\": 7364517986485,\n  \"likes_gained_today\": 10\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "09d9fecb-1af9-4176-881f-c14f87601fe6",
+            "colId": "21e1f991-b9d7-4e34-8279-77186a99027b",
+            "containerId": "98ccaeb5-950f-420a-a209-b254bfd34da9",
+            "name": "social_media empty 2",
+            "url": "http://localhost:3000/api/post/customer_update",
+            "method": "POST",
+            "sortNum": 53750,
+            "created": "2024-01-16T17:38:26.866Z",
+            "modified": "2024-01-16T17:38:40.460Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"customer_shopify_id\": 7364517986485,\n  \"followers_gained_today\": 10\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "14007822-e38b-4a7d-b107-83ce7989a8e1",
+            "colId": "21e1f991-b9d7-4e34-8279-77186a99027b",
+            "containerId": "98ccaeb5-950f-420a-a209-b254bfd34da9",
+            "name": "social_media empty 3",
+            "url": "http://localhost:3000/api/post/customer_update",
+            "method": "POST",
+            "sortNum": 54375,
+            "created": "2024-01-16T17:38:43.377Z",
+            "modified": "2024-01-16T17:38:53.645Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"likes_gained_today\": 10,\n  \"followers_gained_today\": 10\n}",
+                "form": []
+            },
+            "tests": []
         },
         {
             "_id": "6c50b759-c968-41fa-bf5c-c55387f13358",
             "colId": "21e1f991-b9d7-4e34-8279-77186a99027b",
             "containerId": "98ccaeb5-950f-420a-a209-b254bfd34da9",
-            "name": "social_media invalid 0",
-            "url": "",
-            "method": "GET",
+            "name": "social_media valid 0",
+            "url": "http://localhost:3000/api/post/customer_update",
+            "method": "POST",
             "sortNum": 60000,
             "created": "2024-01-15T23:17:04.037Z",
-            "modified": "2024-01-15T23:17:04.037Z",
-            "headers": []
+            "modified": "2024-01-16T17:34:42.065Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"customer_shopify_id\": 7364517986485,\n  \"likes_gained_today\": 10,\n  \"followers_gained_today\": 10\n}",
+                "form": []
+            },
+            "tests": []
         },
         {
-            "_id": "81bb73d4-ce44-4170-8d43-4eb8ad2a3d29",
+            "_id": "89ad1755-54e2-4c28-aae1-0020aafe092f",
+            "colId": "21e1f991-b9d7-4e34-8279-77186a99027b",
+            "containerId": "98ccaeb5-950f-420a-a209-b254bfd34da9",
+            "name": "social_media valid 1",
+            "url": "http://localhost:3000/api/post/customer_update",
+            "method": "POST",
+            "sortNum": 65000,
+            "created": "2024-01-16T17:30:33.925Z",
+            "modified": "2024-01-16T17:30:33.925Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"customer_shopify_id\": 7364517986485,\n  \"likes_gained_today\": 10,\n  \"followers_gained_today\": 10\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "17febf0b-dce3-4a8a-ac1a-60ba99173621",
+            "colId": "21e1f991-b9d7-4e34-8279-77186a99027b",
+            "containerId": "98ccaeb5-950f-420a-a209-b254bfd34da9",
+            "name": "social_media invalid 0",
+            "url": "http://localhost:3000/api/post/customer_update",
+            "method": "POST",
+            "sortNum": 75000,
+            "created": "2024-01-16T17:34:56.492Z",
+            "modified": "2024-01-16T17:35:11.112Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"customer_shopify_id\": 7364517986485asd,\n  \"likes_gained_today\": 10,\n  \"followers_gained_today\": 10\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "1ca79395-eb97-4610-a1e1-f8b33f9c2ba0",
             "colId": "21e1f991-b9d7-4e34-8279-77186a99027b",
             "containerId": "98ccaeb5-950f-420a-a209-b254bfd34da9",
             "name": "social_media invalid 1",
-            "url": "",
-            "method": "GET",
-            "sortNum": 70000,
-            "created": "2024-01-15T23:17:25.310Z",
-            "modified": "2024-01-15T23:17:25.310Z",
-            "headers": []
+            "url": "http://localhost:3000/api/post/customer_update",
+            "method": "POST",
+            "sortNum": 85000,
+            "created": "2024-01-16T17:36:17.363Z",
+            "modified": "2024-01-16T17:36:36.026Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"customer_shopify_id\": \"7364517986485asd\",\n  \"likes_gained_today\": 10,\n  \"followers_gained_today\": 10\n}",
+                "form": []
+            },
+            "tests": []
         },
         {
-            "_id": "b04cf6f9-655b-47a1-8591-d3b39daad1d7",
+            "_id": "7730a6d5-8938-43a3-bff9-663d37a4ca87",
             "colId": "21e1f991-b9d7-4e34-8279-77186a99027b",
             "containerId": "98ccaeb5-950f-420a-a209-b254bfd34da9",
             "name": "social_media invalid 2",
-            "url": "",
-            "method": "GET",
-            "sortNum": 80000,
-            "created": "2024-01-15T23:17:35.150Z",
-            "modified": "2024-01-15T23:17:35.150Z",
-            "headers": []
+            "url": "http://localhost:3000/api/post/customer_update",
+            "method": "POST",
+            "sortNum": 95000,
+            "created": "2024-01-16T17:36:42.987Z",
+            "modified": "2024-01-16T17:37:22.650Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"customer_shopify_id\": 7364517986485,\n  \"likes_gained_today\": \"asdas10\",\n  \"followers_gained_today\": 10\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "59149cb1-80c8-445c-a3d9-5be5a755e890",
+            "colId": "21e1f991-b9d7-4e34-8279-77186a99027b",
+            "containerId": "98ccaeb5-950f-420a-a209-b254bfd34da9",
+            "name": "social_media invalid 3",
+            "url": "http://localhost:3000/api/post/customer_update",
+            "method": "POST",
+            "sortNum": 105000,
+            "created": "2024-01-16T17:37:14.876Z",
+            "modified": "2024-01-16T17:37:25.139Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"customer_shopify_id\": 7364517986485,\n  \"likes_gained_today\": 10,\n  \"followers_gained_today\": \"10asdasd\"\n}",
+                "form": []
+            },
+            "tests": []
         }
     ]
 }
