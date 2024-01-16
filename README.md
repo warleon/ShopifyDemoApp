@@ -1,3 +1,12 @@
+# Task
+
+Create a **Server Only Custom Shopify App** that:
+
+- [x] Has an endpoint for social media updates
+- [x] Has an endpoint for sending emails
+- [x] Registers a Webhook for the Customers/Update topic
+- [x] Merges the information received from the webhooks and social media updates
+
 # Design Decisions
 
 ## Stack
