@@ -1,8 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "@/global";
 import { createTransport } from "nodemailer";
-
-const prisma = new PrismaClient();
 
 const transport = createTransport({
   service: "Gmail",

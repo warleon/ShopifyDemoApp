@@ -1,7 +1,7 @@
 {
     "client": "Thunder Client",
     "collectionName": "baltoTask",
-    "dateExported": "2024-01-15T23:03:45.172Z",
+    "dateExported": "2024-01-16T15:15:19.035Z",
     "version": "1.1",
     "folders": [
         {
@@ -24,25 +24,64 @@
             "_id": "178daa81-4700-4b7a-af89-18f85e45e5ad",
             "colId": "21e1f991-b9d7-4e34-8279-77186a99027b",
             "containerId": "a1489028-36b0-474e-9ef9-ffa88afdb3ac",
-            "name": "webhook_empty",
-            "url": "",
-            "method": "GET",
+            "name": "webhook missing headers",
+            "url": "http://localhost:3000/api/webhook/customer_update",
+            "method": "POST",
             "sortNum": 10000,
             "created": "2024-01-15T22:57:25.776Z",
-            "modified": "2024-01-15T22:57:25.777Z",
-            "headers": []
+            "modified": "2024-01-15T23:26:42.575Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "40bbab60-5c16-4b0f-84d5-32a2c3aaeeee",
+            "colId": "21e1f991-b9d7-4e34-8279-77186a99027b",
+            "containerId": "a1489028-36b0-474e-9ef9-ffa88afdb3ac",
+            "name": "webhook get",
+            "url": "http://localhost:3000/api/webhook/customer_update",
+            "method": "GET",
+            "sortNum": 15000,
+            "created": "2024-01-15T23:41:55.938Z",
+            "modified": "2024-01-15T23:42:10.374Z",
+            "headers": [],
+            "params": [],
+            "tests": []
         },
         {
             "_id": "da0621fd-f3bc-4ccf-bf13-c46e3fb62e64",
             "colId": "21e1f991-b9d7-4e34-8279-77186a99027b",
             "containerId": "a1489028-36b0-474e-9ef9-ffa88afdb3ac",
-            "name": "webhook_invalid",
-            "url": "",
-            "method": "GET",
+            "name": "webhook invalid 200 but fail 0",
+            "url": "http://localhost:3000/api/webhook/customer_update",
+            "method": "POST",
             "sortNum": 20000,
             "created": "2024-01-15T22:58:11.992Z",
-            "modified": "2024-01-15T22:58:11.992Z",
-            "headers": []
+            "modified": "2024-01-15T23:47:22.539Z",
+            "headers": [
+                {
+                    "name": "X-Shopify-API-Version",
+                    "value": "asd"
+                },
+                {
+                    "name": "X-Shopify-Shop-Domain",
+                    "value": "asd"
+                },
+                {
+                    "name": "X-Shopify-Hmac-Sha256",
+                    "value": "asd"
+                },
+                {
+                    "name": "X-Shopify-Topic",
+                    "value": "asd"
+                },
+                {
+                    "name": "X-Shopify-Webhook-Id",
+                    "value": "asd"
+                }
+            ],
+            "params": [],
+            "tests": []
         },
         {
             "_id": "a0c8a27a-3193-467e-acdc-1d69bbcb9019",
@@ -57,6 +96,86 @@
             "headers": []
         },
         {
+            "_id": "7c9a2e0b-6c3c-4f57-a204-67b0fdf43dd0",
+            "colId": "21e1f991-b9d7-4e34-8279-77186a99027b",
+            "containerId": "a1489028-36b0-474e-9ef9-ffa88afdb3ac",
+            "name": "webhook invalid 200 but success 0",
+            "url": "http://localhost:3000/api/webhook/customer_update",
+            "method": "POST",
+            "sortNum": 30000,
+            "created": "2024-01-15T23:48:07.989Z",
+            "modified": "2024-01-16T00:01:16.316Z",
+            "headers": [
+                {
+                    "name": "X-Shopify-API-Version",
+                    "value": "asd"
+                },
+                {
+                    "name": "X-Shopify-Shop-Domain",
+                    "value": "asd"
+                },
+                {
+                    "name": "X-Shopify-Hmac-Sha256",
+                    "value": "asd"
+                },
+                {
+                    "name": "X-Shopify-Topic",
+                    "value": "asd"
+                },
+                {
+                    "name": "X-Shopify-Webhook-Id",
+                    "value": "asd"
+                }
+            ],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"id\": 1231231231231,\n  \"email\": \"placeYourEmailHereToTestSendEmail@example.com\",\n  \"signedUp\": \"2024-01-12T18:22:58.000Z\",\n  \"first_name\": \"example\",\n  \"last_name\": \"name\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "308edf78-5aae-4304-98e7-24306a447719",
+            "colId": "21e1f991-b9d7-4e34-8279-77186a99027b",
+            "containerId": "a1489028-36b0-474e-9ef9-ffa88afdb3ac",
+            "name": "webhook invalid 200 but success 1",
+            "url": "http://localhost:3000/api/webhook/customer_update",
+            "method": "POST",
+            "sortNum": 40000,
+            "created": "2024-01-16T00:00:21.005Z",
+            "modified": "2024-01-16T00:01:50.833Z",
+            "headers": [
+                {
+                    "name": "X-Shopify-API-Version",
+                    "value": "asd"
+                },
+                {
+                    "name": "X-Shopify-Shop-Domain",
+                    "value": "asd"
+                },
+                {
+                    "name": "X-Shopify-Hmac-Sha256",
+                    "value": "asd"
+                },
+                {
+                    "name": "X-Shopify-Topic",
+                    "value": "asd"
+                },
+                {
+                    "name": "X-Shopify-Webhook-Id",
+                    "value": "asd"
+                }
+            ],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"id\": 123123123123123,\n  \"email\": \"placeYourEmailHereToTestSendEmail@example.com\",\n  \"signedUp\": \"asdasddadadfafdfdaafdafdfdafd\",\n  \"first_name\": \"example\",\n  \"last_name\": \"name\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
             "_id": "4bd7fd2c-4e74-4b2a-8030-949c96f8d0df",
             "colId": "21e1f991-b9d7-4e34-8279-77186a99027b",
             "containerId": "98ccaeb5-950f-420a-a209-b254bfd34da9",
@@ -66,6 +185,42 @@
             "sortNum": 50000,
             "created": "2024-01-15T23:01:38.835Z",
             "modified": "2024-01-15T23:01:38.835Z",
+            "headers": []
+        },
+        {
+            "_id": "6c50b759-c968-41fa-bf5c-c55387f13358",
+            "colId": "21e1f991-b9d7-4e34-8279-77186a99027b",
+            "containerId": "98ccaeb5-950f-420a-a209-b254bfd34da9",
+            "name": "social_media invalid 0",
+            "url": "",
+            "method": "GET",
+            "sortNum": 60000,
+            "created": "2024-01-15T23:17:04.037Z",
+            "modified": "2024-01-15T23:17:04.037Z",
+            "headers": []
+        },
+        {
+            "_id": "81bb73d4-ce44-4170-8d43-4eb8ad2a3d29",
+            "colId": "21e1f991-b9d7-4e34-8279-77186a99027b",
+            "containerId": "98ccaeb5-950f-420a-a209-b254bfd34da9",
+            "name": "social_media invalid 1",
+            "url": "",
+            "method": "GET",
+            "sortNum": 70000,
+            "created": "2024-01-15T23:17:25.310Z",
+            "modified": "2024-01-15T23:17:25.310Z",
+            "headers": []
+        },
+        {
+            "_id": "b04cf6f9-655b-47a1-8591-d3b39daad1d7",
+            "colId": "21e1f991-b9d7-4e34-8279-77186a99027b",
+            "containerId": "98ccaeb5-950f-420a-a209-b254bfd34da9",
+            "name": "social_media invalid 2",
+            "url": "",
+            "method": "GET",
+            "sortNum": 80000,
+            "created": "2024-01-15T23:17:35.150Z",
+            "modified": "2024-01-15T23:17:35.150Z",
             "headers": []
         }
     ]
