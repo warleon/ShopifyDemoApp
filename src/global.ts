@@ -57,7 +57,7 @@ function createShopify() {
     CUSTOMERS_UPDATE: [
       {
         deliveryMethod: DeliveryMethod.Http,
-        callbackUrl: `${process.env.SHOPIFY_APP_URL}/api/webhook/customer_update`,
+        callbackUrl: `${process.env.SHOPIFY_APP_URL}/api/webhook`,
       },
     ],
   });

@@ -63,6 +63,7 @@ export default async function handler(
     fields.topic = req.headers["x-shopify-topic"] as string;
   }
 
+  if (fields.topic !== "customers/update") return;
   const { id, email, created_at, first_name, last_name } = req.body;
   try {
     await prisma.customer.upsert({

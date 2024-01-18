@@ -50,16 +50,16 @@ For the database I decided to use Prisma as the ORM and SQLite as the backend da
 
 For the API I have exposed just three http endpoints, wich are:
 
-- **POST /api/webhook/update_customer**
+- **POST /api/webhook**
 
   > To receive the incoming notifications from **Shopify**
 
-- **POST /api/post/update_customer**
+- **POST /api/update_customer**
 
   > To receive the incoming notifications from social media
   > (custom test cases)
 
-- **GET /api/get/send_mail**
+- **GET /api/send_mail**
   > To send the mail to the
   > **top ten most liked clients** and
   > **top ten most followed clients**
@@ -92,7 +92,7 @@ I will asume that you have:
 
 Then:
 
-1.  Clone this repository if reading this on Github, else you already have the repo in your machine
+1.  download the latest release
 1.  Open the current directory (the one that contains this readme.md) on VSCode
 1.  Create a `.env` file with the following enviroment variables:
 
