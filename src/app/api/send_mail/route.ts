@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { prisma, transport } from "@/global";
+import { NextRequest, NextResponse } from "next/server";
 
 // O(n^2) algorithm is acceptable because the size of data is at most n=20
 function getUniques(data: any[]) {
@@ -19,14 +20,7 @@ function getUniques(data: any[]) {
   return res;
 }
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  if (req.method !== "GET") {
-    res.status(405).setHeader("Allow", "GET").send("Method Not Allowed");
-    return;
-  }
+export async function GET(req: NextRequest) {
   try {
     const topLikes = await prisma.customer.findMany({
       orderBy: {
@@ -54,7 +48,10 @@ export default async function handler(
       });
     });
   } catch (err) {
-    res.status(500).send("Internal Server Error");
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
   }
-  res.status(200).send("Ok");
+  return NextResponse.json({ error: "OK" }, { status: 200 });
 }
