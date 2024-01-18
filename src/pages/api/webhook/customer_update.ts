@@ -8,9 +8,23 @@ import {
   WebhookValidationErrorReason,
   WebhookValidationInvalid,
 } from "@shopify/shopify-api";
-import { NextFetchEvent, NextRequest, NextResponse } from "next/server";
 
-export default async function POST(req: NextRequest, res: NextResponse) {
+//left unused function in code, just to show the suffer caused by shopify's buggued api
+function validateHmac(data: any, hmac: string): boolean {
+  const macEngine = createHmac("sha256", process.env.SHOPIFY_CLIENT_SECRET!);
+  macEngine.update(stringify(data));
+  const computeHmac = macEngine.digest("base64");
+  return computeHmac === hmac;
+}
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  if (req.method !== "POST") {
+    res.status(405).setHeader("Allow", "POST").send("Method Not Allowed");
+    return;
+  }
   // will fail for private app
   const { valid, ...others } = await shopify.webhooks.validate({
     rawBody: stringify(req.body), // also tried with JSON.stringify
@@ -27,16 +41,29 @@ export default async function POST(req: NextRequest, res: NextResponse) {
     ) {
       //continue flow since shopify's API Hmac validation is bugged for CustomApps
     } else {
-      return NextResponse.json({}, { status: 500 });
+      res.status(400).send("Bad Request");
+      return;
     }
   }
+  res.status(200).send("Ok"); //a legitimate shopify webhook trigger should always hit this line
+  let fields: WebhookFields = {
+    webhookId: "",
+    apiVersion: "",
+    domain: "",
+    hmac: "",
+    topic: "",
+  };
+  if (valid) fields = others as WebhookFields;
+  else {
+    // handled diferent because of ignored Hmac validation
+    fields.webhookId = req.headers["x-shopify-webhook-id"] as string;
+    fields.apiVersion = req.headers["x-shopify-api-version"] as string;
+    fields.domain = req.headers["x-shopify-shop-domain"] as string;
+    fields.hmac = req.headers["x-shopify-hmac-sha256"] as string;
+    fields.topic = req.headers["x-shopify-topic"] as string;
+  }
 
-  processRequest(req);
-  return NextResponse.json({}, { status: 200 });
-}
-
-async function processRequest(req: NextRequest) {
-  const { id, email, created_at, first_name, last_name } = await req.json();
+  const { id, email, created_at, first_name, last_name } = req.body;
   try {
     await prisma.customer.upsert({
       where: { id: id },
@@ -57,12 +84,4 @@ async function processRequest(req: NextRequest) {
     // data in the body is missign or is of different type, this can happend only when Shopify was not the one sending the request
     // either way we already notified Shopify that the webhook has been received succesfully
   }
-}
-
-//left unused function in code, just to show the suffer caused by shopify's buggued api
-function validateHmac(data: any, hmac: string): boolean {
-  const macEngine = createHmac("sha256", process.env.SHOPIFY_CLIENT_SECRET!);
-  macEngine.update(stringify(data));
-  const computeHmac = macEngine.digest("base64");
-  return computeHmac === hmac;
 }
