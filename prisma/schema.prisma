@@ -17,4 +17,11 @@ model Customer{
   signedUp DateTime @default(now())
   totalLikes BigInt @default(0)
   totalFollowers BigInt @default(0)
+  code Code? @relation()
+}
+
+model Code{
+  id String @id
+  customer Customer @relation(fields: [customerId],references: [id])
+  customerId BigInt @unique
 }

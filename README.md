@@ -230,7 +230,6 @@ available for a **public app** created in the **Shopify Partners Dashboard**
 - For the first version of **This API** I, in an optimistic mindset,
   left the incomming request pass even if the Hmac validation fails
 
-- **TODO make This API Oauth compatible**
 - As an external solution, the firewall can be configured such that only allows incoming traffic from specific domains, such like **shopify.com**, this solution is inspired by [**This Stack Exchange Question**](https://unix.stackexchange.com/questions/91701/ufw-allow-traffic-only-from-a-domain-with-dynamic-ip-address)
 
 # Learning experience
