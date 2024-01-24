@@ -29,7 +29,6 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  //matcher: "/((?!api|favicon.ico|login|validate).*)",
   matcher: "/",
 };
 
@@ -50,23 +49,3 @@ function generateNonce(length: number) {
 
   return nonce;
 }
-//import jwt, { JwtPayload } from "jsonwebtoken";
-
-//  const url = new URL("/login", req.url);
-//  const webtoken = req.cookies.get("jwt");
-//  if (!webtoken) {
-//    return NextResponse.redirect(url);
-//  }
-//  let payload;
-//  try {
-//    payload = JSON.parse(
-//      (jwt.verify(webtoken.value, process.env.JWT_TOKEN!) as JwtPayload)
-//        .payload,
-//      (key, value) => {}
-//    );
-//  } catch {
-//    return NextResponse.redirect(url);
-//  }
-//  const res = NextResponse.next();
-//  res.headers.set("X-data", JSON.stringify(payload));
-//  return res;
