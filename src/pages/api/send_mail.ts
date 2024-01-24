@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { prisma, transport } from "@/global";
+import { prisma } from "@/global";
+import { transport } from "@/transport";
 
 // O(n^2) algorithm is acceptable because the size of data is at most n=20
 function getUniques(data: any[]) {

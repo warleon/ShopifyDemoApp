@@ -1,6 +1,4 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { prisma } from "@/global";
-import { ShopifyAccessCode } from "@prisma/client";
 
 export default async function handler(
   req: NextApiRequest,
@@ -42,26 +40,13 @@ export default async function handler(
   });
   console.log(response.status);
 
-  const accessCode = (await response.json()) as ShopifyAccessCode;
+  const { id_token, access_token } = await response.json();
 
-  console.log(accessCode);
-
-  const { id_token } = await prisma.shopifyAccessCode.create({
-    data: {
-      access_token: accessCode.access_token,
-      expires_in: accessCode.expires_in,
-      id_token: accessCode.id_token,
-      refresh_token: accessCode.refresh_token,
-    },
-    select: {
-      id_token: true,
-    },
-  });
   res
     .appendHeader("Set-Cookie", `id_token=${id_token};Path=/;HttpOnly`)
+    .appendHeader("Set-Cookie", `access_token=${access_token};Path=/;HttpOnly`)
     .status(200)
     .redirect("/");
-  //.redirect(process.env.SHOPIFY_APP_URL!);
 }
 
 //async function useToken(req:NextApiRequest) {

@@ -1,38 +1,9 @@
-import { NextApiRequest } from "next";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function middleware(req: NextApiRequest) {
-  console.log(["IN MIDDLEWARE", req.body, req.query, req.headers, req.cookies]);
-  //console.log("QUERY");
-  // req.nextUrl.searchParams.forEach((v, k) => {
-  //   console.log([k, v]);
-  // });
-  // console.log("HEADERS");
-  // req.headers.forEach((v, k) => {
-  //   console.log([k, v]);
-  // });
-  NextResponse.next();
-
+export async function middleware(req: NextRequest) {
   const id_token = req.cookies.get("id_token");
-  const referer = req.headers.get("referer");
-  console.log(["REFERER", referer]);
-  if (referer) {
-    const from = new URL(referer);
-    console.log(["HOSTNAME", from.hostname]);
-    console.log(["PATHNAME", from.pathname]);
-    console.log(["ENV.SHOPIFY_APP_URL", process.env.SHOPIFY_APP_URL]);
-    if (
-      process.env.SHOPIFY_APP_URL!.includes(from.hostname) &&
-      from.pathname == "/api/shopify_login"
-    )
-      return NextResponse.next();
-  }
+  const access_token = req.cookies.get("access_token");
   console.log(["ID_TOKEN", id_token]);
-
-  if (id_token) {
-    return NextResponse.next();
-  }
-
   const client_id = process.env.SHOPIFY_HEADLESS_CLIENT_ID!;
   const redirect_uri = `${process.env.SHOPIFY_APP_URL!}/api/shopify_login`;
 
@@ -50,11 +21,16 @@ export async function middleware(req: NextApiRequest) {
   authorizationRequestUrl.searchParams.append("state", generateState());
   authorizationRequestUrl.searchParams.append("nonce", generateNonce(10));
 
+  if (id_token && access_token) {
+    //    //TODO query shopify to get customer data
+    return NextResponse.next();
+  }
   return NextResponse.redirect(authorizationRequestUrl);
 }
 
 export const config = {
-  matcher: "/((?!api|favicon.ico|login|validate).*)",
+  //matcher: "/((?!api|favicon.ico|login|validate).*)",
+  matcher: "/",
 };
 
 function generateState(): string {

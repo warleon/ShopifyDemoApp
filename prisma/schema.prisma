@@ -25,10 +25,3 @@ model Code{
   customer Customer @relation(fields: [customerId],references: [id])
   customerId BigInt @unique
 }
-
-model ShopifyAccessCode{
-  id_token String @id
-  access_token String
-  expires_in  Int
-  refresh_token String
-}
