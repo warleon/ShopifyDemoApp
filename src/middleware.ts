@@ -1,95 +1,96 @@
+import { NextApiRequest } from "next";
 import { NextRequest, NextResponse } from "next/server";
-import jwt, { JwtPayload } from "jsonwebtoken";
-import { redirect } from "next/navigation";
 
-export async function middleware(req: NextRequest) {
-  const url = new URL("/login", req.url);
-  const webtoken = req.cookies.get("jwt");
-  if (!webtoken) {
-    return NextResponse.redirect(url);
+export async function middleware(req: NextApiRequest) {
+  console.log(["IN MIDDLEWARE", req.body, req.query, req.headers, req.cookies]);
+  //console.log("QUERY");
+  // req.nextUrl.searchParams.forEach((v, k) => {
+  //   console.log([k, v]);
+  // });
+  // console.log("HEADERS");
+  // req.headers.forEach((v, k) => {
+  //   console.log([k, v]);
+  // });
+  NextResponse.next();
+
+  const id_token = req.cookies.get("id_token");
+  const referer = req.headers.get("referer");
+  console.log(["REFERER", referer]);
+  if (referer) {
+    const from = new URL(referer);
+    console.log(["HOSTNAME", from.hostname]);
+    console.log(["PATHNAME", from.pathname]);
+    console.log(["ENV.SHOPIFY_APP_URL", process.env.SHOPIFY_APP_URL]);
+    if (
+      process.env.SHOPIFY_APP_URL!.includes(from.hostname) &&
+      from.pathname == "/api/shopify_login"
+    )
+      return NextResponse.next();
   }
-  let payload;
-  try {
-    payload = JSON.parse(
-      (jwt.verify(webtoken.value, process.env.JWT_TOKEN!) as JwtPayload).payload
-    );
-  } catch {
-    return NextResponse.redirect(url);
+  console.log(["ID_TOKEN", id_token]);
+
+  if (id_token) {
+    return NextResponse.next();
   }
-  const res = NextResponse.next();
-  res.headers.set("X-data", JSON.stringify(payload));
-  return res;
+
+  const client_id = process.env.SHOPIFY_HEADLESS_CLIENT_ID!;
+  const redirect_uri = `${process.env.SHOPIFY_APP_URL!}/api/shopify_login`;
+
+  const authorizationRequestUrl = new URL(
+    `https://shopify.com/${process.env.SHOPIFY_STORE_ID!}/auth/oauth/authorize`
+  );
+
+  authorizationRequestUrl.searchParams.append(
+    "scope",
+    "openid email https://api.customers.com/auth/customer.graphql"
+  );
+  authorizationRequestUrl.searchParams.append("client_id", client_id);
+  authorizationRequestUrl.searchParams.append("response_type", "code");
+  authorizationRequestUrl.searchParams.append("redirect_uri", redirect_uri);
+  authorizationRequestUrl.searchParams.append("state", generateState());
+  authorizationRequestUrl.searchParams.append("nonce", generateNonce(10));
+
+  return NextResponse.redirect(authorizationRequestUrl);
 }
 
 export const config = {
   matcher: "/((?!api|favicon.ico|login|validate).*)",
 };
 
-//  const code = req.nextUrl.searchParams.get("code");
-//  const state = req.nextUrl.searchParams.get("state");
-//  const client_id = process.env.SHOPIFY_HEADLESS_CLIENT_ID!;
-//  const redirect_uri = `${process.env.SHOPIFY_APP_URL!}/`;
-//
-//  if (!(code && state)) {
-//    const authorizationRequestUrl = new URL(
-//      `https://shopify.com/${process.env
-//        .SHOPIFY_STORE_ID!}/auth/oauth/authorize`
-//    );
-//
-//    authorizationRequestUrl.searchParams.append(
-//      "scope",
-//      "openid email https://api.customers.com/auth/customer.graphql"
-//    );
-//    authorizationRequestUrl.searchParams.append("client_id", client_id);
-//    authorizationRequestUrl.searchParams.append("response_type", "code");
-//    authorizationRequestUrl.searchParams.append("redirect_uri", redirect_uri);
-//    authorizationRequestUrl.searchParams.append("state", generateState());
-//    authorizationRequestUrl.searchParams.append("nonce", generateNonce(10));
-//
-//    return NextResponse.redirect(authorizationRequestUrl);
-//  } else {
-//    const authenticationRequestUrl = new URL(
-//      `https://shopify.com/${process.env.SHOPIFY_STORE_ID!}/auth/oauth/token`
-//    );
-//    const sanitizedCode = code.replaceAll("+", "-").replaceAll("/", "_");
-//
-//    const body = new URLSearchParams();
-//    body.append("grant_type", "authorization_code");
-//    body.append("client_id", client_id);
-//    body.append("client_secret", process.env.SHOPIFY_HEADLESS_CLIENT_SECRET!);
-//    body.append("redirect_uri", redirect_uri);
-//    body.append("code", code);
-//    const headers = {
-//      "content-type": "application/x-www-form-urlencoded",
-//      // Confidential Client
-//      Authorization: `Basic ${code}`,
-//    };
-//
-//    const token = await fetch(authenticationRequestUrl, {
-//      method: "POST",
-//      headers: headers,
-//      body,
-//    }).then((r: Response) => {
-//      console.log(r.status);
-//      return r.json();
-//    });
-//    console.log(token);
+function generateState(): string {
+  const timestamp = Date.now().toString();
+  const randomString = Math.random().toString(36).substring(2);
+  return timestamp + randomString;
+}
+function generateNonce(length: number) {
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let nonce = "";
+
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    nonce += characters.charAt(randomIndex);
+  }
+
+  return nonce;
+}
+//import jwt, { JwtPayload } from "jsonwebtoken";
+
+//  const url = new URL("/login", req.url);
+//  const webtoken = req.cookies.get("jwt");
+//  if (!webtoken) {
+//    return NextResponse.redirect(url);
 //  }
-//
-//function generateState(): string {
-//  const timestamp = Date.now().toString();
-//  const randomString = Math.random().toString(36).substring(2);
-//  return timestamp + randomString;
-//}
-//function generateNonce(length: number) {
-//  const characters =
-//    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-//  let nonce = "";
-//
-//  for (let i = 0; i < length; i++) {
-//    const randomIndex = Math.floor(Math.random() * characters.length);
-//    nonce += characters.charAt(randomIndex);
+//  let payload;
+//  try {
+//    payload = JSON.parse(
+//      (jwt.verify(webtoken.value, process.env.JWT_TOKEN!) as JwtPayload)
+//        .payload,
+//      (key, value) => {}
+//    );
+//  } catch {
+//    return NextResponse.redirect(url);
 //  }
-//
-//  return nonce;
-//}
+//  const res = NextResponse.next();
+//  res.headers.set("X-data", JSON.stringify(payload));
+//  return res;
