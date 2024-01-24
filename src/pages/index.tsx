@@ -1,11 +1,11 @@
 import { NextPageContext } from "next";
 
 Page.getInitialProps = async (ctx: NextPageContext) => {
-  if (!ctx.res) return {};
-  const data = ctx.res.getHeader("X-data");
+  if (!ctx.req) return {};
+  const data = ctx.req.headers["x-data"];
   if (!data) return {};
-  ctx.res!.removeHeader("X-data");
-  return JSON.parse(data as string);
+  delete ctx.req.headers["x-data"];
+  return data;
 };
 
 export default function Page(data: any) {

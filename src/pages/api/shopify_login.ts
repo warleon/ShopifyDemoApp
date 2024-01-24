@@ -11,7 +11,6 @@ export default async function handler(
   const authenticationRequestUrl = new URL(
     `https://shopify.com/${process.env.SHOPIFY_STORE_ID!}/auth/oauth/token`
   );
-  //const sanitizedCode = code.replaceAll("+", "-").replaceAll("/", "_");
 
   const body = new URLSearchParams();
   body.append("grant_type", "authorization_code");
@@ -23,7 +22,8 @@ export default async function handler(
   const credentials = await crypto.subtle.digest(
     { name: "SHA-256" },
     new TextEncoder().encode(
-      `${process.env.SHOPIFY_CLIENT_ID}:${process.env.SHOPIFY_CLIENT_SECRET}`
+      `${process.env.SHOPIFY_HEADLESS_CLIENT_ID!}:${process.env
+        .SHOPIFY_HEADLESS_CLIENT_SECRET!}`
     )
   );
 
@@ -39,74 +39,15 @@ export default async function handler(
     body,
   });
   console.log(response.status);
+  const jsonResponse = await response.json();
+  console.log(jsonResponse);
 
-  const { id_token, access_token } = await response.json();
+  const { id_token, access_token, refresh_token } = jsonResponse;
 
   res
-    .appendHeader("Set-Cookie", `id_token=${id_token};Path=/;HttpOnly`)
-    .appendHeader("Set-Cookie", `access_token=${access_token};Path=/;HttpOnly`)
+    .appendHeader("Set-Cookie", `id_token=${id_token};Path=/`)
+    .appendHeader("Set-Cookie", `access_token=${access_token};Path=/`)
+    .appendHeader("Set-Cookie", `refresh_token=${refresh_token};Path=/`)
     .status(200)
     .redirect("/");
 }
-
-//async function useToken(req:NextApiRequest) {
-//  const clientId = process.env.CLIENT_ID!;
-//  const customerApiClientId = "30243aa5-17c1-465a-8493-944bcc4e88aa";
-//  const accessToken = req.cookies["accessToken"]
-//  if(!accessToken)return
-//  const body = new URLSearchParams();
-//
-//  body.append("grant_type", "urn:ietf:params:oauth:grant-type:token-exchange");
-//  body.append("client_id", clientId);
-//  body.append("audience", customerApiClientId);
-//  body.append("subject_token", accessToken);
-//  body.append(
-//    "subject_token_type",
-//    "urn:ietf:params:oauth:token-type:access_token"
-//  );
-//  body.append("scopes", "https://api.customers.com/auth/customer.graphql");
-//
-//  const headers = {
-//    "content-type": "application/x-www-form-urlencoded",
-//    // Confidential Client
-//    Authorization: "Basic `<credentials>`",
-//  };
-//
-//  const response = await fetch(
-//    `https://shopify.com/${}/auth/oauth/token`,
-//    {
-//      method: "POST",
-//      headers: headers,
-//      body,
-//    }
-//  );
-//
-//  interface AccessTokenResponse {
-//    access_token: string;
-//    expires_in: number;
-//  }
-//
-//  const { access_token } = (await response.json()) as AccessTokenResponse;
-//}
-//
-
-//async function getUserData(access_token:string) {
-//  const url = new URL(
-//    `https://shopify.com/${process.env.SHOPIFY_STORE_ID}/account/customer/api/unstable/graphql`
-//  );
-//  const response = await fetch(
-//url,  {
-//    method: 'POST',
-//    headers: {
-//      'Content-Type': 'application/json',
-//      Authorization: access_token,
-//    },
-//    body: JSON.stringify({
-//      operationName: 'SomeQuery',
-//      'query { personalAccount { email }}',
-//      variables: {},
-//    })
-//  }
-//  )
-//
-//}
